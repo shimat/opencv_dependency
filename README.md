@@ -1,5 +1,5 @@
 # opencv_dependency
-Rust code snippet to create an OpenCV dependency graph as DOT (Graphviz) 
+Rust code snippet to create a dependency graph of OpenCV modules as DOT (Graphviz) 
 
 ```dot
 digraph "OpenCV Dependencies" {
