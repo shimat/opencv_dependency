@@ -1,8 +1,7 @@
-//#![deny(warnings)]
 use std::io::Read;
 use regex::RegexBuilder;
 
-// 指定したURLからGETして文字列を返す
+// Fetch web content by HTTP GET
 fn http_get(url: &String) -> Result<String, String> {
     let mut res = reqwest::blocking::get(url).map_err(|e| e.to_string())?;
     let mut body = String::new();
@@ -10,7 +9,7 @@ fn http_get(url: &String) -> Result<String, String> {
     Ok(body)
 }
 
-// ocv_define_module または ocv_add_module の命令部分を読み取る
+// Read ocv_define_module or ocv_add_module 
 fn get_dependencies_line(body: &String) -> Option<String> {
     let re = RegexBuilder::new(r"ocv_(define|add)_module\((?P<modules>.+?)\)$")
         .multi_line(true)
@@ -24,7 +23,7 @@ fn get_dependencies_line(body: &String) -> Option<String> {
     }
 }
 
-// ocv_define(add)_module の命令から依存モジュールを解釈する
+// Parse ocv_define(add)_module line string
 fn parse(dependencies_string: &String) -> (&str, Vec<String>, Vec<String>)
 {
     let tokens: Vec<&str> = dependencies_string.split_whitespace().collect();
@@ -145,7 +144,6 @@ fn main() {
     for module in modules.iter() {
         let url = format!("https://raw.githubusercontent.com/opencv/opencv/master/modules/{}/CMakeLists.txt", module);
         //let url = format!("https://raw.githubusercontent.com/opencv/opencv_contrib/master/modules/{}/CMakeLists.txt", module);
-        //println!("-----{}-----", url);
 
         let body = match http_get(&url) {
             Ok(b) => b,
@@ -156,8 +154,6 @@ fn main() {
             Some(ds) => ds,
             None => continue
         };
-
-        //println!("line: {}\n", dependencies_string);
 
         let (module_name, required, optional) = parse(&dependencies_string);
         if !required.is_empty() {
