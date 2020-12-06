@@ -163,12 +163,12 @@ fn main() {
         if !required.is_empty() {
             println!("  \"{}\" -> {{ {} }}", 
                 module_name, 
-                required.iter().map(|s| format!("\"{}\"", s)).collect::<String>());
+                required.iter().map(|s| format!("\"{}\"", s)).collect::<Vec<String>>().join(" "));
         }
         if !optional.is_empty() {
             println!("  \"{}\" -> {{ {} }} [style=\"dashed\"]", 
                 module_name, 
-                optional.iter().map(|s| format!("\"{}\"", s)).collect::<String>()); 
+                optional.iter().map(|s| format!("\"{}\"", s)).collect::<Vec<String>>().join(" ")); 
         }       
     } 
 
